@@ -27,7 +27,7 @@ along with Obfusion.  If not, see <http://www.gnu.org/licenses/>.
 #include "../src/include.h"
 
 #define OBFUSION_MAJOR_VER 0
-#define OBFUSION_MINOR_VER 1
+#define OBFUSION_MINOR_VER 2
 
 class codeinstr;
 class modbuf;

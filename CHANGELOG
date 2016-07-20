@@ -1,2 +1,6 @@
+2016-07-20 : version 0.2
+* obfuscation would improperly handle instructions involving ESP register - added omitting of such instructions from the obfuscation process
+* added obfuscation of instructions: mov [memory], imm8/32
+
 2016-07-06 : version 0.1
 * initial release

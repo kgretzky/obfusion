@@ -589,7 +589,7 @@ void obfusion::mangle_code()
 		{
 			if ( cinstr->is_data() == false )
 			{
-				if (obf_code.size() > 0 && (mt::rand_u32()%100) <= m_jmp_perc)
+				if (obf_code.size() > 0 && (mt::rand_u32()%100) < m_jmp_perc)
 				{
 					// insert jump
 					u32 to_label = cinstr->label();

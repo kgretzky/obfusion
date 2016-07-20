@@ -64,6 +64,7 @@ protected:
 	void obf_push_imm(codeinstr* cinstr, std::vector<codeinstr*> *obf_instr_vec);
 	void obf_mov_reg_mem(codeinstr* cinstr, std::vector<codeinstr*> *obf_instr_vec);
 	void obf_calc_reg(codeinstr* cinstr, std::vector<codeinstr*> *obf_instr_vec);
+	void obf_mov_mem_imm(codeinstr* cinstr, std::vector<codeinstr*> *obf_instr_vec);
 
 	void _gen_reg_calc(u8 reg, s32 imm, u32 steps, u8 nbytes, std::vector<codeinstr*> *obf_instr_vec);
 	codeinstr* _gen_reg_calc_instr(u8 reg, s32 imm, u32 calc_type, u8 nbytes);

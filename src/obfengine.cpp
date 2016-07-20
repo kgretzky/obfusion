@@ -52,6 +52,8 @@ void obfengine::obfuscate_instr(codeinstr* cinstr, std::vector<codeinstr*> *obf_
 		obf_mov_reg_mem(cinstr, obf_instr_vec);
 	else if ( op1 >= 0x80 && op1 <= 0x83 ) // <add, or, adc, sbb, and, sub, xor, cmp> reg, imm
 		obf_calc_reg(cinstr, obf_instr_vec);
+	else if ( op1 >= 0xc6 && op1 <= 0xc7 ) // mov [mem], imm8/32
+		obf_mov_mem_imm(cinstr, obf_instr_vec);
 }
 
 void obfengine::set_obf_steps(u32 min_steps, u32 max_steps)
@@ -241,6 +243,17 @@ void obfengine::obf_calc_reg(codeinstr* cinstr, std::vector<codeinstr*> *obf_ins
 	else
 		exc_regs.push_back(hde32->modrm_rm);
 
+	u8 reg_src = 0xff;
+	if (hde32->sib > 0)
+		reg_src = hde32->sib_base;
+	else
+	{
+		if (hde32->modrm_mod > 0x00)
+			reg_src = hde32->modrm_rm;
+	}
+	if (reg_src == R_ESP)
+		return;
+
 	u8 treg = _get_rand_reg(exc_regs);
 	u8 mode = hde32->modrm_reg;
 
@@ -304,6 +317,77 @@ void obfengine::obf_calc_reg(codeinstr* cinstr, std::vector<codeinstr*> *obf_ins
 
 	u8 nmodrm = (hde32->modrm & 0xc7) | (treg << 3);
 	
+	modbuf data(16);
+	codeinstr *minstr;
+
+	if (hde32->p_66)
+		data.add<u8>(0x66);
+	data.add<u8>(nopcode);
+	data.add<u8>(nmodrm);
+	if ((hde32->flags & F_SIB) == F_SIB)
+		data.add<u8>(hde32->sib);
+	if ((hde32->flags & (F_DISP8|F_DISP32)))
+	{
+		if (hde32->flags & F_DISP8)
+			data.add<s8>((s8)disp);
+		else
+			data.add<s32>(disp);
+	}
+
+	minstr = _create_instr32(data.data(), 0, 0);
+	_add_instr_prefixes(minstr, cinstr);
+
+	obf_instr_vec->push_back(minstr);
+	obf_instr_vec->push_back(_asm_pop_reg(treg));
+}
+
+void obfengine::obf_mov_mem_imm(codeinstr* cinstr, std::vector<codeinstr*> *obf_instr_vec)
+{
+	s32 imm = cinstr->get_rel_imm();
+	s32 disp = cinstr->get_rel_disp();
+	hde32s *hde32 = cinstr->get_hde32();
+	u8 op1 = hde32->opcode;
+
+	u8 nbytes = 4;
+
+	std::vector<u8> exc_regs;
+	exc_regs.push_back(R_ESP);
+	exc_regs.push_back(R_EBP);
+
+	if ((hde32->flags & F_SIB) == F_SIB)
+	{
+		exc_regs.push_back(hde32->sib_base);
+		exc_regs.push_back(hde32->sib_index);
+	}
+	else
+		exc_regs.push_back(hde32->modrm_rm);
+
+	u8 reg_src = 0xff;
+	if (hde32->sib > 0)
+		reg_src = hde32->sib_base;
+	else
+	{
+		if (hde32->modrm_mod > 0x00)
+			reg_src = hde32->modrm_rm;
+	}
+	if (reg_src == R_ESP)
+		return;
+
+	u8 treg = _get_rand_reg(exc_regs);
+
+	u32 steps = (mt::rand_u32() % (m_max_obf_steps - m_min_obf_steps)) + m_min_obf_steps;
+
+	obf_instr_vec->push_back(_asm_push_reg(treg));
+	_gen_reg_calc(treg, imm, steps, nbytes, obf_instr_vec);
+
+	u8 nopcode = 0;
+	if (op1 == 0xc7)
+		nopcode = 0x89;
+	else if (op1 == 0xc6)
+		nopcode = 0x88;
+
+	u8 nmodrm = (hde32->modrm & 0xc7) | (treg << 3);
+
 	modbuf data(16);
 	codeinstr *minstr;
 
