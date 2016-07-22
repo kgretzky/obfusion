@@ -202,10 +202,6 @@
 				RelativePath=".\src\pstdint.h"
 				>
 			</File>
-			<File
-				RelativePath=".\include\types__.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
