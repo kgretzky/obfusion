@@ -31,6 +31,22 @@ Here is the disassembled sample shellcode that spawns `calc.exe` in original for
 
 And here is the disassembly of the same sample shellcode after the 3-pass obfuscation process: [obfuscated shellcode](https://raw.githubusercontent.com/kgretzky/obfusion/master/examples/res/output.lst)
 
+# How to compile
+
+#### Windows
+
+Open the `.sln` solution in Visual Studio (at least version 2008) and click `Build Solution`
+
+#### Linux
+
+Navigate to project directory and type:
+
+```
+cmake .
+make
+sudo make install
+```
+
 # External libraries
 
 Hacker Disassembler Engine 32/64
