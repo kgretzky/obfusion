@@ -65,13 +65,13 @@ void modbuf::add_data( void *data, int len )
 
 		if ( m_buf != 0 )
 		{
-			memcpy_s( new_buf, m_alloc_size, m_buf, m_size );
+			memcpy( new_buf, m_buf, m_size );
 			delete[] m_buf;
 		}
 		m_buf = new_buf;
 	}
 
-	memcpy_s( m_buf + m_size, m_alloc_size - m_size, data, len );
+	memcpy( m_buf + m_size, data, len );
 	m_size += len;
 }
 

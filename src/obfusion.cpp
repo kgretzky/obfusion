@@ -387,7 +387,7 @@ bool obfusion::recalc_jumps()
 {
 	u32 diff_cnt = 0;
 
-	DEBUG_PRINTF(__FUNCTION__": begin - m_jmp_map.size() = %u\n", m_jmp_map.size() );
+	DEBUG_PRINTF("%s: begin - m_jmp_map.size() = %u\n", __FUNCTION__, m_jmp_map.size() );
 
 	std::map<codeinstr*,u32> instr_map;
 	for ( std::map<codeinstr*,codeinstr*>::iterator it = m_jmp_map.begin(); it != m_jmp_map.end(); ++it )
@@ -409,7 +409,7 @@ bool obfusion::recalc_jumps()
 		offset += cinstr->size();
 	}
 
-	DEBUG_PRINTF(__FUNCTION__": cache init done.\n" );
+	DEBUG_PRINTF("%s: cache init done.\n", __FUNCTION__ );
 
 	std::map<u32,s32> sdiff_map;
 
@@ -497,12 +497,12 @@ bool obfusion::recalc_jumps()
 			}
 		}
 
-		DEBUG_PRINTF(__FUNCTION__": diff_cnt = %u\n", diff_cnt);
+		DEBUG_PRINTF("%s: diff_cnt = %u\n", __FUNCTION__, diff_cnt);
 
 		if (diff_cnt == 0)
 			break;
 	}
-	DEBUG_PRINTF(__FUNCTION__": finish\n" );
+	DEBUG_PRINTF("%s: finish\n", __FUNCTION__ );
 	return true;
 }
 
@@ -569,20 +569,20 @@ void obfusion::mangle_code()
 {
 	std::vector<codeinstr*> obf_code;
 
-	DEBUG_PRINTF(__FUNCTION__": begin\n");
+	DEBUG_PRINTF("%s: begin\n", __FUNCTION__);
 
 	update_cache();
 
-	DEBUG_PRINTF(__FUNCTION__": cache updated\n");
+	DEBUG_PRINTF("%s: cache updated\n", __FUNCTION__);
 
-	DEBUG_PRINTF(__FUNCTION__": jump chance - %u%%\n", m_jmp_perc);
+	DEBUG_PRINTF("%s: jump chance - %u%%\n", __FUNCTION__, m_jmp_perc);
 
 	u32 dbgi = 0;
 	u32 ki = 0;
 	for ( std::vector<codeinstr*>::iterator it = m_code.begin(); it != m_code.end(); ++it )
 	{
 		if (dbgi % 1000 == 0)
-			DEBUG_PRINTF(__FUNCTION__": %u/%u\n", dbgi, m_code.size());
+			DEBUG_PRINTF("%s: %u/%u\n", __FUNCTION__, dbgi, m_code.size());
 
 		codeinstr *cinstr = (*it);
 		if (cinstr)
@@ -633,14 +633,14 @@ void obfusion::mangle_code()
 		++dbgi;
 	}
 
-	DEBUG_PRINTF(__FUNCTION__": update_jumps()\n");
+	DEBUG_PRINTF("%s: update_jumps()\n", __FUNCTION__);
 
 	m_code = obf_code;
 	update_jumps();
 
 	clear_cache();
 
-	DEBUG_PRINTF(__FUNCTION__": finish\n");
+	DEBUG_PRINTF("%s: finish\n", __FUNCTION__);
 }
 
 void obfusion::update_jumps()
