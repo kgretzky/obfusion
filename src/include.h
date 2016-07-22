@@ -24,9 +24,9 @@ along with Obfusion.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "../include/types.h"
 #include <list>
 #include <vector>
 #include <map>
 #include <algorithm>
 #include <string.h>
+#include "../include/obfusion.h"

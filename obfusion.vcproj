@@ -203,7 +203,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\types.h"
+				RelativePath=".\include\types__.h"
 				>
 			</File>
 		</Filter>
