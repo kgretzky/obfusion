@@ -40,7 +40,7 @@ public:
 	virtual ~obfusion(void);
 
 	void clean();
-	void load32( const void* data, u32 size, std::vector<std::pair<u32,u32>> data_bytes = std::vector<std::pair<u32,u32>>() );
+	void load32( const void* data, u32 size, std::vector<std::pair<u32,u32> > data_bytes = std::vector<std::pair<u32,u32> >() );
 
 	bool obfuscate(u32 seed, u32 passes);
 

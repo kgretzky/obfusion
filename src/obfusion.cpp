@@ -58,7 +58,7 @@ void obfusion::clean()
 	m_cur_label = 1;
 }
 
-void obfusion::load32( const void* data, u32 size, std::vector<std::pair<u32,u32>> data_bytes )
+void obfusion::load32( const void* data, u32 size, std::vector<std::pair<u32,u32> > data_bytes )
 {
 	clean();
 
@@ -71,7 +71,7 @@ void obfusion::load32( const void* data, u32 size, std::vector<std::pair<u32,u32
 		u32 data_size = 0;
 
 		// check if we hit the data block
-		for ( std::vector<std::pair<u32,u32>>::iterator it = data_bytes.begin(); it != data_bytes.end(); ++it )
+		for ( std::vector<std::pair<u32,u32> >::iterator it = data_bytes.begin(); it != data_bytes.end(); ++it )
 		{
 			std::pair<u32,u32> drange = (*it);
 			if ( offset >= drange.first && offset < drange.second )
